@@ -8,7 +8,7 @@ setup(
     name=os.environ['PKG_NAME'],
     version=os.environ['PKG_VERSION'],
 
-    description='My Python library project',
+    description='kernel k-means implementation for N3C',
 
     author="UNITE",
 
