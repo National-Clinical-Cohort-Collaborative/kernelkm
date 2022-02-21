@@ -1,4 +1,4 @@
-# Publishing Conda Libraries
+# Kernel K-Means
 
 This repository template is setup to publish a Python package into Foundry.
 
