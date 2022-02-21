@@ -18,8 +18,8 @@ buildscript {
 }
 
 pythonLibrary {
-        publishChannelName = 'libs'
-    }
+    publishChannelName = 'libs'
+}
 
 
 
