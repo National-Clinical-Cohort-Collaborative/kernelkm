@@ -1,5 +1,5 @@
-import numpy as np 
-import koalas as pd 
+import numpy as np
+import koalas as pd
 import warnings
 
 
@@ -12,6 +12,7 @@ class KernelKMeans:
     This type of K-means clustering is not supported out of the box by scikit learn
     The code was developed for the N3C platform
     """
+
     def __init__(self, datamat, patient_id_list):
         """
         datamat is a symmetric matrix with patient-patient similarities
@@ -65,7 +66,6 @@ class KernelKMeans:
     def _sum_of_squared_error(self, vec_a, vec_b):
         """
         vec_a and vec_b must both be np arrays of floats
-        this is the SSE
         """
         return np.square(np.sum(vec_a-vec_b)**2)
 
@@ -88,4 +88,3 @@ class KernelKMeans:
             centroid_errors.append(centroid_err)
 
         return centroids_assigned, centroid_errors
-
