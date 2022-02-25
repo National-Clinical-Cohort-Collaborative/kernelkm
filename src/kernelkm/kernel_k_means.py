@@ -67,7 +67,7 @@ class KernelKMeans:
         vec_a and vec_b must both be np arrays of floats
         this is the SSE
         """
-        return np.square(np.sum(a-b)**2)
+        return np.square(np.sum(vec_a-vec_b)**2)
 
     def _assign_to_centroid(self, centroids):
         n_patients = len(self._pat_id_list)
@@ -78,10 +78,9 @@ class KernelKMeans:
         for pat in range(n_patients):
             errors = np.array([])
             for centroid in range(k):
-                vec_a
+                #vec_a
                 error = self._sum_of_squared_error(centroids.iloc[centroid, :2], self._matrix[pat, :2])
                 errors = np.append(errors, error)
-            
             clostest_centroid = np.where(errors == np.amin(error))[0].tolist()[0]
             centroid_err = np.amin(errors)
 
@@ -89,8 +88,4 @@ class KernelKMeans:
             centroid_errors.append(centroid_err)
 
         return centroids_assigned, centroid_errors
-
-
-    
-
 
