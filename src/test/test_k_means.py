@@ -11,7 +11,7 @@ class TestKMeans(TestCase):
         ## Make 6x6 matrix
         cls._mat = np.array([[0, 5, 6, 1, 1, 1], # Patient 1 similarities
                              [5, 0, 4, 1, 1, 1], # Patient 2 similarities
-                             [1, 1, 0, 4, 4, 7], # Patient 3 similarities
+                             [6, 4, 0, 1, 1, 1], # Patient 3 similarities
                              [1, 1, 1, 0, 5, 5], # Patient 4 similarities
                              [1, 1, 1, 5, 0, 5], # Patient 5 similarities
                              [1, 1, 1, 5, 5, 0]]) # Patient 6 similarities

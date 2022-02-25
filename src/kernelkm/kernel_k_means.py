@@ -1,5 +1,5 @@
 import numpy as np 
-import pandas as pd 
+import koalas as pd 
 import warnings
 
 
