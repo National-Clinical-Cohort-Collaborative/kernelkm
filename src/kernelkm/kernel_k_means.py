@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import sys
 import warnings
 
 
@@ -31,8 +32,6 @@ class KernelKMeans:
             raise ValueError("datamat needs to have same dimension as patient_id_list")
         self._matrix = datamat
         self._pat_id_list = patient_id_list
-
-
 
     def calculate(self, k):
         if not isinstance(k, int):
@@ -76,16 +75,20 @@ class KernelKMeans:
         k = centroids.shape[0]
 
         for pat in range(n_patients):
-            errors = np.array([])
+            min_centroid_error = sys.float_info.max
+            closest_centroid_idx = -1
             for centroid in range(k):
-                #vec_a
+                # centroids.iloc and seld._matrix[pat, :] both retrieve vectors of similarities
                 error = self._sum_of_squared_error(centroids.iloc[centroid, :], self._matrix[pat, :])
-                errors = np.append(errors, error)
-            clostest_centroid = np.where(errors == np.amin(error))[0].tolist()[0]
-            centroid_err = np.amin(errors)
-
-            centroids_assigned.append(clostest_centroid)
-            centroid_errors.append(centroid_err)
+                if error < min_centroid_error:
+                    min_centroid_error = error
+                    closest_centroid_idx = centroid
+            if closest_centroid_idx < 0:
+                #  if this happens, there is probably an error that the user needs to know about
+                #  and so we should stop execution.
+                raise ValueError(f"Failed to assign patient {pat} to centroid (should never happen)")
+            centroids_assigned.append(closest_centroid_idx)
+            centroid_errors.append(min_centroid_error)
 
         return centroids_assigned, centroid_errors
 
