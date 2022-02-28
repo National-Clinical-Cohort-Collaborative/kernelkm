@@ -31,9 +31,9 @@ class TestKMeans(TestCase):
 
     def test_clustering(self):
         kkm = self._kkm
-        centroids, error = kkm.calculate(k=4)
+        centroids, error = kkm.calculate(k=2)
         print(centroids)
-        self.assertTrue(4, len(centroids))
+        self.assertEqual(4, len(centroids))
 
 
 

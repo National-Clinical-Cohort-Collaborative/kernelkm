@@ -14,7 +14,7 @@ class KernelKMeans:
     The code was developed for the N3C platform
     """
 
-    def __init__(self, datamat, patient_id_list):
+    def __init__(self, datamat, patient_id_list, max_iter=100):
         """
         datamat is a symmetric matrix with patient-patient similarities
         patient_id_list is a list of patient ids corresponding to the rows (and columns) of datamat
@@ -32,6 +32,7 @@ class KernelKMeans:
             raise ValueError("datamat needs to have same dimension as patient_id_list")
         self._matrix = datamat
         self._pat_id_list = patient_id_list
+        self._max_iter = max_iter
 
     def calculate(self, k):
         if not isinstance(k, int):
@@ -47,10 +48,13 @@ class KernelKMeans:
             centroid_assignments, centroid_errors = self._assign_to_centroid(centroids)
             errors.append(centroid_errors)
             centroids_new = self._adjust_centroids(centroid_assignments)
-            if np.count_nonzero(centroids-centroids_new) == 0:
-                diff = 0
+            if centroids.equals(centroids_new):
+                diff = False
             else:
                 centroids = centroids_new
+            if i == self._max_iter:
+                print("Reaching maximum allowed iterations ({self._max_iter}), terminating optimization loop")
+                break
         return centroids, errors
 
     def _init_centroids(self, k):
@@ -64,6 +68,8 @@ class KernelKMeans:
         for centroid in range(k):
             centroid = np.random.uniform(centroid_min, centroid_max, n)
             centroids.append(centroid)
+            if n != len(centroid):
+                raise ValueError("Problem constructing centroid")
         centroids = pd.DataFrame(centroids, columns=self._pat_id_list)
         return centroids
 
@@ -83,8 +89,14 @@ class KernelKMeans:
             min_centroid_error = sys.float_info.max
             closest_centroid_idx = -1
             for centroid in range(k):
-                # centroids.iloc and seld._matrix[pat, :] both retrieve vectors of similarities
-                error = self._sum_of_squared_error(centroids.iloc[centroid, :], self._matrix[pat, :])
+                # centroids.iloc retrieves a pandas series
+                # and seld._matrix[pat, :] retrieves a ndarray
+                # both represent vectors of similarities
+                patient_a = centroids.iloc[centroid, :].to_numpy()
+                patient_b = self._matrix[pat, :]
+                if len(patient_a) != len(patient_b):
+                    raise ValueError(f"Unqual lengths - centroid {centroid}: {len(patient_a)} and patient {pat}: {len(patient_b)}")
+                error = np.square(np.sum(patient_a - patient_b)**2)
                 if error < min_centroid_error:
                     min_centroid_error = error
                     closest_centroid_idx = centroid
@@ -105,8 +117,11 @@ class KernelKMeans:
         """
         if not isinstance(centroid_assignments, list):
             raise ValueError("centroids argument must be a list")
+        mat = self._matrix.copy()
+        df = pd.DataFrame(mat)
+        df['cluster'] = centroid_assignments
 
-        new_centroids = pd.DataFrame(self._matrix).groupby(by=centroid_assignments).mean()
+        new_centroids = pd.DataFrame(df).groupby(by='cluster').mean()
         return new_centroids
 
     def get_patient_count(self):
