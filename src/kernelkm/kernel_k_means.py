@@ -47,10 +47,10 @@ class KernelKMeans:
             centroid_assignments, centroid_errors = self._assign_to_centroid(centroids)
             errors.append(centroid_errors)
             centroids_new = self._adjust_centroids(centroid_assignments)
-            if np.count_nonzero(centroids-) == 0:
+            if np.count_nonzero(centroids-centroids_new) == 0:
                 diff = 0
             else:
-                centroids = 
+                centroids = centroids_new
         return centroids, errors
 
     def _init_centroids(self, k):
@@ -106,7 +106,7 @@ class KernelKMeans:
         if not isinstance(centroid_assignments, list):
             raise ValueError("centroids argument must be a list")
 
-        new_centroids = pd.DataFrame(self._matrix).groupby(by=centroid_assignments).mean().values
+        new_centroids = pd.DataFrame(self._matrix).groupby(by=centroid_assignments).mean()
         return new_centroids
 
     def get_patient_count(self):

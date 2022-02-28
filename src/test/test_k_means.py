@@ -23,11 +23,11 @@ class TestKMeans(TestCase):
 
     def test_get_maximum_value(self):
         kkm = self._kkm
-        self.assertEquals(7, kkm.get_max_value())
+        self.assertEqual(7, kkm.get_max_value())
 
     def test_get_patient_count(self):
         kkm = self._kkm
-        self.assertEquals(6, kkm.get_patient_count())
+        self.assertEqual(6, kkm.get_patient_count())
 
     def test_clustering(self):
         kkm = self._kkm
