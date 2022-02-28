@@ -36,23 +36,28 @@ class KernelKMeans:
     def calculate(self, k):
         if not isinstance(k, int):
             raise ValueError("Must call this function with one argument - an integer k for the number of clusters")
-        centroids_assigned = self._init_centroids(k)
-        error = []
-        compr = True
+        centroids = self._init_centroids(k)
+        errors = []
+        diff = True
         i = 0
 
-        while compr:
-            centroids_assigned, centroid_errors = self._assign_to_centroid(centroids_assigned)
-            centroids_assigned = self._adjust_centroids(centroids_assigned)
-
-
-
+        while diff:
+            print(f"Round {i}")
+            i += 1
+            centroid_assignments, centroid_errors = self._assign_to_centroid(centroids)
+            errors.append(centroid_errors)
+            centroids_new = self._adjust_centroids(centroid_assignments)
+            if np.count_nonzero(centroids-) == 0:
+                diff = 0
+            else:
+                centroids = 
+        return centroids, errors
 
     def _init_centroids(self, k):
         """
         initialize centroids to uniform random values between the minimum (0.0) and maximum of all similarity values
         """
-        centroid_min = 0.0 
+        centroid_min = 0.0
         centroid_max = self.get_max_value()
         n = self.get_patient_count()
         centroids = []  # a list of np.ndarray's
@@ -69,10 +74,10 @@ class KernelKMeans:
         return np.square(np.sum(vec_a-vec_b)**2)
 
     def _assign_to_centroid(self, centroids):
-        n_patients = len(self._pat_id_list)
+        n_patients = self.get_patient_count()
         centroids_assigned = []
         centroid_errors = []
-        k = centroids.shape[0]
+        k = len(centroids)
 
         for pat in range(n_patients):
             min_centroid_error = sys.float_info.max
@@ -92,10 +97,17 @@ class KernelKMeans:
 
         return centroids_assigned, centroid_errors
 
-    def _adjust_centroids(self, centroids):
-        if not isinstance(centroids, list):
+    def _adjust_centroids(self, centroid_assignments):
+        """
+        centroid_assignments - a list of integers with the same length as the number of patients
+                               each entry represents the centroid to which the patient has been assigned
+        return - a DataFrame with the new centroids that correspond to the patient assignments.
+        """
+        if not isinstance(centroid_assignments, list):
             raise ValueError("centroids argument must be a list")
-        pass
+
+        new_centroids = pd.DataFrame(self._matrix).groupby(by=centroid_assignments).mean().values
+        return new_centroids
 
     def get_patient_count(self):
         return len(self._pat_id_list)
