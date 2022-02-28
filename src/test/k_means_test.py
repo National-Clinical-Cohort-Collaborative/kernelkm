@@ -1,7 +1,6 @@
-import numpy as np 
+import numpy as np
 from unittest import TestCase
 from kernelkm import KernelKMeans
-
 
 
 class TestKMeans(TestCase):
