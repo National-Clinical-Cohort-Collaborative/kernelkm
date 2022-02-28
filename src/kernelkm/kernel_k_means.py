@@ -55,7 +55,7 @@ class KernelKMeans:
             if i == self._max_iter:
                 print("Reaching maximum allowed iterations ({self._max_iter}), terminating optimization loop")
                 break
-        return centroids, errors
+        return centroids, centroid_assignments, errors
 
     def _init_centroids(self, k):
         """
@@ -96,7 +96,7 @@ class KernelKMeans:
                 patient_b = self._matrix[pat, :]
                 if len(patient_a) != len(patient_b):
                     raise ValueError(f"Unqual lengths - centroid {centroid}: {len(patient_a)} and patient {pat}: {len(patient_b)}")
-                error = np.square(np.sum(patient_a - patient_b)**2)
+                error = np.sqrt(np.sum(patient_a - patient_b)**2)
                 if error < min_centroid_error:
                     min_centroid_error = error
                     closest_centroid_idx = centroid
@@ -120,6 +120,7 @@ class KernelKMeans:
         mat = self._matrix.copy()
         df = pd.DataFrame(mat)
         df['cluster'] = centroid_assignments
+        df['cluster'] = [0,0,0,1,1,1]
 
         new_centroids = pd.DataFrame(df).groupby(by='cluster').mean()
         return new_centroids
