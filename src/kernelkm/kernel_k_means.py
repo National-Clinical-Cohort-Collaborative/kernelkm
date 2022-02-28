@@ -54,9 +54,9 @@ class KernelKMeans:
         initialize centroids to uniform random values between the minimum (0.0) and maximum of all similarity values
         """
         centroid_min = 0.0 
-        centroid_max = self._matrix.max().max() # maximum over all data points
-        n = self._matrix.shape[0] # number of patients
-        centroids = []
+        centroid_max = self.get_max_value()
+        n = self.get_patient_count()
+        centroids = []  # a list of np.ndarray's
         for centroid in range(k):
             centroid = np.random.uniform(centroid_min, centroid_max, n)
             centroids.append(centroid)
@@ -79,7 +79,7 @@ class KernelKMeans:
             errors = np.array([])
             for centroid in range(k):
                 #vec_a
-                error = self._sum_of_squared_error(centroids.iloc[centroid, :2], self._matrix[pat, :2])
+                error = self._sum_of_squared_error(centroids.iloc[centroid, :], self._matrix[pat, :])
                 errors = np.append(errors, error)
             clostest_centroid = np.where(errors == np.amin(error))[0].tolist()[0]
             centroid_err = np.amin(errors)
@@ -93,3 +93,12 @@ class KernelKMeans:
         if not isinstance(centroids, list):
             raise ValueError("centroids argument must be a list")
         pass
+
+    def get_patient_count(self):
+        return len(self._pat_id_list)
+
+    def get_max_value(self):
+        """
+        return:  maximum over all data points
+        """
+        return self._matrix.max().max()
