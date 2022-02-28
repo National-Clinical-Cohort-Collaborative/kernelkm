@@ -37,7 +37,7 @@ class KernelKMeans:
     def calculate(self, k):
         if not isinstance(k, int):
             raise ValueError("Must call this function with one argument - an integer k for the number of clusters")
-        centroids = self._init_centroids(k)
+        centroids = self.plus_plus(k) # _init_centroids(k)
         errors = []
         diff = True
         i = 0
@@ -57,6 +57,39 @@ class KernelKMeans:
                 print("Reaching maximum allowed iterations ({self._max_iter}), terminating optimization loop")
                 break
         return centroids, centroid_assignments, errors
+
+    def plus_plus(self, k, random_state=42):
+        """
+        Create cluster centroids using the k-means++ algorithm.
+        Parameters
+        ----------
+        ds : numpy array
+            The dataset to be used for centroid initialization.
+        k : int
+            The desired number of clusters for which centroids are required.
+        Returns
+        -------
+        centroids : numpy array
+            Collection of k centroids as a numpy array.
+        Inspiration from here: https://stackoverflow.com/questions/5466323/how-could-one-implement-the-k-means-algorithm
+        """
+
+        ds = self._matrix
+        np.random.seed(random_state)
+        centroids = [ds[0]]
+
+        for _ in range(1, k):
+            dist_sq = np.array([min([np.inner(c-x, c-x) for c in centroids]) for x in ds])
+            probs = dist_sq/dist_sq.sum()
+            cumulative_probs = probs.cumsum()
+            r = np.random.rand()
+
+            for j, p in enumerate(cumulative_probs):
+                if r < p:
+                    i = j
+                    break
+            centroids.append(ds[i])
+        return pd.DataFrame(centroids, columns=self._pat_id_list)
 
     def _init_centroids(self, k):
         """
@@ -121,7 +154,6 @@ class KernelKMeans:
         mat = self._matrix.copy()
         df = pd.DataFrame(mat)
         df['cluster'] = centroid_assignments
-        df['cluster'] = [0,0,0,1,1,1]
 
         new_centroids = pd.DataFrame(df).groupby(by='cluster').mean()
         return new_centroids
