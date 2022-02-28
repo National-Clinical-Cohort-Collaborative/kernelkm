@@ -1,5 +1,5 @@
 import numpy as np
-import koalas as pd
+import pandas as pd
 import warnings
 
 
@@ -88,3 +88,8 @@ class KernelKMeans:
             centroid_errors.append(centroid_err)
 
         return centroids_assigned, centroid_errors
+
+    def _adjust_centroids(self, centroids):
+        if not isinstance(centroids, list):
+            raise ValueError("centroids argument must be a list")
+        pass
