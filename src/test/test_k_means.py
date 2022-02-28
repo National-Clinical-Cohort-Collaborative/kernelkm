@@ -16,6 +16,7 @@ class TestKMeans(TestCase):
                              [1, 1, 1, 5, 5, 0]])  # Patient 6 similarities
         cls._labels = ["p1", "p2", "p3", "p4", "p5", "p6"]
         cls._kkm = KernelKMeans(datamat=cls._mat, patient_id_list=cls._labels)
+        np.random.seed(24)
 
     def test_ctor(self):
         kkm = self._kkm

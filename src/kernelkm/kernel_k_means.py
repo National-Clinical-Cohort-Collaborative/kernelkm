@@ -41,6 +41,7 @@ class KernelKMeans:
         errors = []
         diff = True
         i = 0
+        centroid_assignments = []
 
         while diff:
             print(f"Round {i}")
@@ -96,7 +97,7 @@ class KernelKMeans:
                 patient_b = self._matrix[pat, :]
                 if len(patient_a) != len(patient_b):
                     raise ValueError(f"Unqual lengths - centroid {centroid}: {len(patient_a)} and patient {pat}: {len(patient_b)}")
-                error = np.sqrt(np.sum(patient_a - patient_b)**2)
+                error = np.sqrt(np.sum((patient_a - patient_b)**2))
                 if error < min_centroid_error:
                     min_centroid_error = error
                     closest_centroid_idx = centroid
