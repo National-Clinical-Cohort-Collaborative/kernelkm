@@ -47,13 +47,13 @@ class TestKMeans(TestCase):
         self.assertEqual(2, k)
 
     def test_on_blob_data(self):
-        for this_k in range(2, 10):  # check several correct cluster numbers
+        for this_k in range(3, 7):  # check several correct cluster numbers
             num_patients = 100
             patient_IDs = ["patient" + str(i) for i in range(num_patients)]
             X, correct_cluster_assignments = make_blobs(n_samples=num_patients, n_features=2,
                                                         centers=this_k, cluster_std=.8,)
             # Whole similarity algorithm in one line
-            X_sim = pd.DataFrame( 1 / (1 + distance_matrix(X, X)), columns=patient_IDs, index=patient_IDs)
+            X_sim = pd.DataFrame(1 / (1 + distance_matrix(X, X)), columns=patient_IDs, index=patient_IDs)
 
             # kmeans = KernelKMeans(datamat=np.array(X_sim), patient_id_list=patient_IDs)
             # centroids, centroid_assignments, errors = kmeans.calculate()
