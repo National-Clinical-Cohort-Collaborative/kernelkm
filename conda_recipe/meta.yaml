@@ -21,6 +21,7 @@ requirements:
     - pandas
     - koalas
     - scipy
+    - matplotlib
 
 build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
