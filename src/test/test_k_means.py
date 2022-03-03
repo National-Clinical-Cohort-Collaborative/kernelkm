@@ -39,7 +39,7 @@ class TestKMeans(TestCase):
 
     def test_gap_stat(self):
         gstat = GapStat(datamat=self._mat, patient_id_list=self._labels)
-        k = gstat.calculate_good_k()
+        k, _, _ = gstat.calculate_good_k()
         self.assertEqual(2, k)
 
 

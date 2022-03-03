@@ -45,8 +45,8 @@ class GapStat:
             # check if gap(k-1) \geq gap(k) - s_{k}
             if k > 0:
                 if gap_stat[k] - gap_stat[k-1] + s_stat[k-1] > 0:
-                    return k+1
-        return self._max_k  # if we get here we do not have great clusters
+                    return k+1, s_stat, gap_stat
+        return self._max_k, s_stat, gap_stat  # if we get here we do not have great clusters
 
     def _get_avg_permuted_W_k(self):
         w_k_estimate = []
