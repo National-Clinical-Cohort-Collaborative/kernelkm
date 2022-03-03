@@ -65,7 +65,8 @@ class GapStat:
         permute entries of matrix, reshape 2d to 1d and use np.permutation and reshape back
         """
         N = len(self._pat_id_list)
-        mat = np.random.permutation(self._matrix.reshape(N*N)).reshape(N, N)
+        mat = self._matrix.copy()
+        mat = np.random.permutation(mat.reshape(N*N)).reshape(N, N)
         return mat
 
     def _calculate_D_r(self, matrix, centroid, assigned_to_centroid):
