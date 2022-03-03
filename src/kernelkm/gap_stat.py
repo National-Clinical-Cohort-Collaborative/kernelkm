@@ -74,10 +74,10 @@ class GapStat:
         """
         D_j = 0
         n_r = np.count_nonzero(assigned_to_centroid)
-        for i in assigned_to_centroid:
-            for j in assigned_to_centroid:
-                if i and j:
-                    d_ij = np.sqrt(np.sum((matrix[i]-matrix[j])**2))
+        for i, i_bool in enumerate(assigned_to_centroid):
+            for j, j_bool in enumerate(assigned_to_centroid):
+                if i_bool and j_bool:
+                    d_ij = np.sqrt(np.sum((matrix[i,]-matrix[j,])**2))
                     D_j += d_ij
         return D_j/(2*n_r)
 
