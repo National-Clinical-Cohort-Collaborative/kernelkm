@@ -49,8 +49,8 @@ class TestKMeans(TestCase):
     def test_on_blob_data(self):
         correct_num_clusters = 3
         patient_IDs = ["patient" + str(i) for i in range(3)]
-        X, correct_clusters = make_blobs(n_samples=100, n_features=2,
-                                         centers=correct_num_clusters, cluster_std=.8,)[0]
+        X, correct_cluster_assignments = make_blobs(n_samples=100, n_features=2,
+                                                    centers=correct_num_clusters, cluster_std=.8,)
 
         # turn X in sim matrix to pass to kernelkm 
         # Original code from OP, slightly reformatted
