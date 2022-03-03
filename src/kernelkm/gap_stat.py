@@ -35,7 +35,7 @@ class GapStat:
         gap_stat = [0]
         s_stat = [0]
         # to test up to self._max_k we need the following range!
-        for k in range(0, self._max_k + 1):
+        for k in range(1, self._max_k + 1):
             centroids, centroid_assignments, errors = kkm.calculate(k=k)
             W_k_observed = self._calculate_W_k(self._matrix, centroids, centroid_assignments)
             W_k_expectation, s_k = self._get_avg_permuted_W_k(k)
@@ -43,9 +43,9 @@ class GapStat:
             gap_stat.append(gap_k)
             s_stat.append(s_k)
             # check if gap(k-1) \geq gap(k) - s_{k}
-            if k > 1:
-                if gap_stat[k] - gap_stat[k-1] + s_stat[k-1] > 0:
-                    return k+1, s_stat, gap_stat
+            if k > 2:
+                if gap_stat[k-1] - gap_stat[k] + s_stat[k] > 0:
+                    return k-1, s_stat, gap_stat
         return self._max_k, s_stat, gap_stat  # if we get here we do not have great clusters
 
     def _get_avg_permuted_W_k(self, this_k: int):
