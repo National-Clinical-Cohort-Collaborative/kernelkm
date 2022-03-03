@@ -107,12 +107,7 @@ class KernelKMeans:
         centroids = pd.DataFrame(centroids, columns=self._pat_id_list)
         return centroids
 
-    def _sum_of_squared_error(self, vec_a, vec_b):
-        """
-        vec_a and vec_b must both be np arrays of floats
-        """
-        return np.square(np.sum(vec_a-vec_b)**2)
-
+    
     def _assign_to_centroid(self, centroids):
         n_patients = self.get_patient_count()
         centroids_assigned = []
