@@ -57,7 +57,7 @@ class KernelKMeans:
                 break
         return centroids, centroid_assignments, errors
 
-    def plus_plus(self, k, random_state=42):
+    def plus_plus(self, k):
         """
         Create cluster centroids using the k-means++ algorithm.
         Parameters
@@ -74,7 +74,6 @@ class KernelKMeans:
         """
 
         ds = self._matrix
-        np.random.seed(random_state)
         centroids = [ds[0]]
 
         for _ in range(1, k):

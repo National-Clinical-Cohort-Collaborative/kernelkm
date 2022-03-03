@@ -1,7 +1,5 @@
 import numpy as np
-import pandas as pd
-import sys
-import warnings
+import copy
 from .kernel_k_means import KernelKMeans
 
 
@@ -64,15 +62,11 @@ class GapStat:
         """
         permute entries of matrix, reshape 2d to 1d and use np.permutation and reshape back
         """
-        from datetime import datetime
-        import copy
         N = len(self._pat_id_list)
         mat = copy.deepcopy(self._matrix)
-        np.random.seed(int(datetime.now().timestamp()))
         mat = mat.reshape(N * N)
         np.random.shuffle(mat)
         mat = mat.reshape((N,N))
-        # mat = np.random.permutation().reshape(N, N)
         return mat
 
     def _calculate_D_r(self, matrix, centroid, assigned_to_centroid):
