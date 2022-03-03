@@ -1,6 +1,6 @@
 import numpy as np
 from unittest import TestCase
-from kernelkm import KernelKMeans
+from kernelkm import KernelKMeans, GapStat
 
 
 class TestKMeans(TestCase):
@@ -36,6 +36,11 @@ class TestKMeans(TestCase):
         print(centroid_assignments)
         print(centroids)
         self.assertEqual(centroid_assignments[0], centroid_assignments[1])
+
+    def test_gap_stat(self):
+        gstat = GapStat(datamat=self._mat, patient_id_list=self._labels)
+        k = gstat.calculate_good_k()
+        self.assertEqual(2, KernelKMeans)
 
 
 

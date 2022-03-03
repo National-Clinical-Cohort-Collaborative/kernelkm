@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 import warnings
+from .kernel_k_means import KernelKMeans
 
 
 class GapStat:
@@ -50,15 +51,15 @@ class GapStat:
 
     def _get_avg_permuted_W_k(self):
         w_k_estimate = []
-        for _ in range(self._B):
-            randomize_M = _get_permuted_matrix()
+        for i in range(self._B):
+            randomize_M = self._get_permuted_matrix()
             kkm = KernelKMeans(randomize_M, self._pat_id_list, self._max_iter)
-            centroids, centroid_assignments, errors = kkm.calculate(k=k)
+            centroids, centroid_assignments, errors = kkm.calculate(k=i)
             w_k_star = self._calculate_W_k(centroids, centroid_assignments)
-            w_k_esimate.append(w_k_estimate)
+            w_k_estimate.append(w_k_star)
         s_dk = np.stddev(w_k_estimate)
         s_k = s_dk * np.sqrt(1+1/self._B)
-        return np.mean(w_k_esimate), s_k
+        return np.mean(w_k_estimate), s_k
 
     def _get_permuted_matrix(self):
         """
@@ -68,14 +69,14 @@ class GapStat:
         mat = np.random.permutation(self._matrix.reshape(N*N)).reshape(N, N)
         return mat
 
-    def _calculate_D_r(self, matrix, centroid, assiged_to_centroid):
+    def _calculate_D_r(self, matrix, centroid, assigned_to_centroid):
         """
         sum of pairwise distances
         """
         D_j = 0
-        n_r = sum([1 if x for x in assiged_to_centroid])
-        for i in assiged_to_centroid:
-            for j in assiged_to_centroid:
+        n_r = np.count_nonzero(assigned_to_centroid)
+        for i in assigned_to_centroid:
+            for j in assigned_to_centroid:
                 if i and j:
                     d_ij = np.sqrt(np.sum((matrix[i]-matrix[j])**2))
                     D_j += d_ij
@@ -90,4 +91,5 @@ class GapStat:
             # to indicate whether a patient belongs to centroid i (True) or not (False)
             assigned = [x == i for x in centroid_assignments]
             D_r = self._calculate_D_r(matrix, centroid, assigned)
-            W_k += D-r
+            W_k += D_r
+        return W_k
