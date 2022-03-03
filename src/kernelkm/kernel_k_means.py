@@ -44,7 +44,6 @@ class KernelKMeans:
         centroid_assignments = []
 
         while diff:
-            print(f"Round {i}")
             i += 1
             centroid_assignments, centroid_errors = self._assign_to_centroid(centroids)
             errors.append(centroid_errors)
@@ -107,7 +106,6 @@ class KernelKMeans:
         centroids = pd.DataFrame(centroids, columns=self._pat_id_list)
         return centroids
 
-    
     def _assign_to_centroid(self, centroids):
         n_patients = self.get_patient_count()
         centroids_assigned = []

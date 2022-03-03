@@ -10,7 +10,7 @@ class GapStat:
     Gap statistic for kernel k-means algorithm
     """
 
-    def __init__(self, datamat, patient_id_list, max_k=10, B=100, max_iter=100):
+    def __init__(self, datamat, patient_id_list, max_k=10, B=4, max_iter=100):
         """
         B: number of permutations/randomizations for gapstat
         max_iter: for K means
@@ -23,8 +23,8 @@ class GapStat:
         self._matrix = datamat
         self._pat_id_list = patient_id_list
         self._max_iter = max_iter
-        self._max_k
-        self._B = B 
+        self._max_k = max_k
+        self._B = B
 
     def calculate_good_k(self):
 
@@ -32,32 +32,31 @@ class GapStat:
         data check in KernelKMeans class!
         """
         kkm = KernelKMeans(self._matrix, self._pat_id_list, self._max_iter)
-        gap_stat =[]
+        gap_stat = []
         s_stat = []
         # to test up to self._max_k we need the following range!
-        for k in range(1, self._max_k + 2):
+        for k in range(0, self._max_k + 1):
             centroids, centroid_assignments, errors = kkm.calculate(k=k)
-            W_k_observed = self._calculate_W_k(centroids, centroid_assignments)
+            W_k_observed = self._calculate_W_k(self._matrix, centroids, centroid_assignments)
             W_k_expectation, s_k = self._get_avg_permuted_W_k()
             gap_k = W_k_expectation - W_k_observed
             gap_stat.append(gap_k)
             s_stat.append(s_k)
             # check if gap(k-1) \geq gap(k) - s_{k}
-            if k > 1:
-                if gap_stat[k-1] - gap_stat[k] + s_stat[k] > 0:
-                    return k-1
-            permutated_mat = self._get_permuted_matrix()
+            if k > 0:
+                if gap_stat[k] - gap_stat[k-1] + s_stat[k-1] > 0:
+                    return k+1
         return self._max_k  # if we get here we do not have great clusters
 
     def _get_avg_permuted_W_k(self):
         w_k_estimate = []
         for i in range(self._B):
-            randomize_M = self._get_permuted_matrix()
-            kkm = KernelKMeans(randomize_M, self._pat_id_list, self._max_iter)
+            randomized_M = self._get_permuted_matrix()
+            kkm = KernelKMeans(randomized_M, self._pat_id_list, self._max_iter)
             centroids, centroid_assignments, errors = kkm.calculate(k=i)
-            w_k_star = self._calculate_W_k(centroids, centroid_assignments)
+            w_k_star = self._calculate_W_k(randomized_M, centroids, centroid_assignments)
             w_k_estimate.append(w_k_star)
-        s_dk = np.stddev(w_k_estimate)
+        s_dk = np.std(w_k_estimate)
         s_k = s_dk * np.sqrt(1+1/self._B)
         return np.mean(w_k_estimate), s_k
 

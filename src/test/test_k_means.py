@@ -24,7 +24,7 @@ class TestKMeans(TestCase):
 
     def test_get_maximum_value(self):
         kkm = self._kkm
-        self.assertEqual(7, kkm.get_max_value())
+        self.assertEqual(10, kkm.get_max_value())
 
     def test_get_patient_count(self):
         kkm = self._kkm
@@ -40,7 +40,7 @@ class TestKMeans(TestCase):
     def test_gap_stat(self):
         gstat = GapStat(datamat=self._mat, patient_id_list=self._labels)
         k = gstat.calculate_good_k()
-        self.assertEqual(2, KernelKMeans)
+        self.assertEqual(2, k)
 
 
 
