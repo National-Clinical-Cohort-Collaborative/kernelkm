@@ -50,7 +50,7 @@ class TestKMeans(TestCase):
             num_patients = 100
             patient_IDs = ["patient" + str(i) for i in range(num_patients)]
             X, correct_cluster_assignments = make_blobs(n_samples=num_patients, n_features=4,
-                                                        centers=this_k, cluster_std=.01,)
+                                                        centers=this_k, cluster_std=.05,)
             # Whole similarity algorithm in one line
             X_sim = pd.DataFrame(1 / (1 + distance_matrix(X, X)), columns=patient_IDs, index=patient_IDs)
 
