@@ -20,7 +20,6 @@ class TestKMeans(TestCase):
                              [1, 1, 1, 5, 5, 10]])  # Patient 6 similarities
         cls._labels = ["p1", "p2", "p3", "p4", "p5", "p6"]
         cls._kkm = KernelKMeans(datamat=cls._mat, patient_id_list=cls._labels)
-        #np.random.seed(24)
 
     def test_ctor(self):
         kkm = self._kkm
@@ -48,15 +47,15 @@ class TestKMeans(TestCase):
 
     def test_on_blob_data(self):
         for this_k in range(2, 7):  # check several correct cluster numbers
-            num_patients = 200
+            num_patients = 100
             patient_IDs = ["patient" + str(i) for i in range(num_patients)]
             X, correct_cluster_assignments = make_blobs(n_samples=num_patients, n_features=4,
-                                                        centers=this_k, cluster_std=.8,)
+                                                        centers=this_k, cluster_std=.01,)
             # Whole similarity algorithm in one line
             X_sim = pd.DataFrame(1 / (1 + distance_matrix(X, X)), columns=patient_IDs, index=patient_IDs)
 
             gstat = GapStat(datamat=X_sim.to_numpy(), patient_id_list=patient_IDs)
             inferred_k, _, _ = gstat.calculate_good_k()
             print(f"this_k: {this_k} inferred_k: {inferred_k}")
-            # self.assertEqual(this_k, inferred_k)
+            self.assertEqual(this_k, inferred_k)
 
