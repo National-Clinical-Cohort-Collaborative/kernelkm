@@ -58,4 +58,3 @@ class TestKMeans(TestCase):
             inferred_k, _, _ = gstat.calculate_good_k()
             print(f"this_k: {this_k} inferred_k: {inferred_k}")
             self.assertEqual(this_k, inferred_k)
-
