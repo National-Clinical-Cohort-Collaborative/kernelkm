@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 from .kernel_k_means import KernelKMeans
+from .my_matrix import MyMatrix
 
 
 class GapStat:
@@ -48,8 +49,11 @@ class GapStat:
 
     def _get_avg_permuted_W_k(self, this_k: int):
         w_k_estimate = []
+
+        mm = MyMatrix()
+
         for i in range(self._B):
-            randomized_M = self._get_permuted_matrix()
+            randomized_M = mm.get_permuted_matrix()
             kkm = KernelKMeans(randomized_M, self._pat_id_list, self._max_iter)
             centroids, centroid_assignments, errors = kkm.calculate(k=this_k)
             w_k_star = self._calculate_W_k(randomized_M, centroids, centroid_assignments)
@@ -57,17 +61,6 @@ class GapStat:
         s_dk = np.std(w_k_estimate)
         s_k = s_dk * np.sqrt(1+1/self._B)
         return np.mean(w_k_estimate), s_k
-
-    def _get_permuted_matrix(self):
-        """
-        permute entries of matrix, reshape 2d to 1d and use np.permutation and reshape back
-        """
-        N = len(self._pat_id_list)
-        mat = copy.deepcopy(self._matrix)
-        mat = mat.reshape(N * N)
-        np.random.shuffle(mat)
-        mat = mat.reshape((N,N))
-        return mat
 
     def _calculate_D_r(self, matrix, centroid, assigned_to_centroid):
         """
