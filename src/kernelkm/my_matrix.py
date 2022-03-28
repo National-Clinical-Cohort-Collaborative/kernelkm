@@ -9,6 +9,8 @@ class MyMatrix:
         self._matrix = matrix
 
     def get_permuted_matrix(self):
+        """Permutate all values in matrix that are NOT on the diagonal
+        """
         shape = self._matrix.shape
         if shape[0] != shape[1]:
             raise ValueError(f"Matrix is not a symmetrix matrix, it is {shape[0]}x{shape[1]}")
