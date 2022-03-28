@@ -18,4 +18,8 @@ class TestMyMatrix(TestCase):
     def test_get_permuted_matrix(self):
         m = MyMatrix(self._mat)
         m2 = m.get_permuted_matrix()
-        self.assertTrue(np.all(np.diagonal(m._matrix) == np.diagonal(m2)), "diagonal should be preserved when permuting matrix")
+        self.assertTrue(np.all(np.diagonal(m._matrix) == np.diagonal(m2)),
+                        "diagonal should be preserved when permuting matrix")
+        self.assertCountEqual(list(sorted(m._matrix.flatten())),
+                              list(sorted(m2.flatten())),
+                              "Values shouldn't change after permuting")
