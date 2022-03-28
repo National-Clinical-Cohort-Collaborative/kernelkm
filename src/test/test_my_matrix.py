@@ -15,7 +15,7 @@ class TestMyMatrix(TestCase):
                              [1, 1, 1, 5, 10, 5],  # Patient 5 similarities
                              [1, 1, 1, 5, 5, 10]])  # Patient 6 similarities
 
-    def test_something(self):
+    def test_get_permuted_matrix(self):
         m = MyMatrix(self._mat)
         m2 = m.get_permuted_matrix()
-        self.assertNotNone(m)
+        self.assertTrue(np.all(np.diagonal(m._matrix) == np.diagonal(m2)), "diagonal should be preserved when permuting matrix")
