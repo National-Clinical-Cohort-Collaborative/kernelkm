@@ -1,6 +1,4 @@
-
 import numpy as np
-
 
 
 class MyMatrix:
@@ -9,8 +7,6 @@ class MyMatrix:
         if not isinstance(matrix, np.ndarray):
             raise ValueError("Can only be called on np.matrix")
         self._matrix = matrix
-
-
 
     def get_permuted_matrix(self):
         shpe = self._matrix.shape
