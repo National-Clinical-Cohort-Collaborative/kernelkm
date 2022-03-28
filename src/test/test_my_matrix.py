@@ -3,7 +3,6 @@ from kernelkm import MyMatrix
 import numpy as np
 
 
-
 class TestMyMatrix(TestCase):
 
     @classmethod
@@ -15,9 +14,8 @@ class TestMyMatrix(TestCase):
                              [1, 1, 1, 10, 5, 5],  # Patient 4 similarities
                              [1, 1, 1, 5, 10, 5],  # Patient 5 similarities
                              [1, 1, 1, 5, 5, 10]])  # Patient 6 similarities
-        
 
     def test_something(self):
-        m  = MyMatrix(self._mat)
+        m = MyMatrix(self._mat)
         m2 = m.get_permuted_matrix()
         self.assertNotNone(m)
