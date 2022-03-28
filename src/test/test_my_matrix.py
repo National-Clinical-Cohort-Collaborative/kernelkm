@@ -1,10 +1,10 @@
 from unittest import TestCase
-import numpy as np
 from kernelkm import MyMatrix
+import numpy as np
 
 
 
-class TestMyMatrixeans(TestCase):
+class TestMyMatrix(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
