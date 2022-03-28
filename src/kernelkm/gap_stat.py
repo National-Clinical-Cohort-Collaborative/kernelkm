@@ -77,10 +77,12 @@ class GapStat:
         n_r = np.count_nonzero(assigned_to_centroid)
         for i, i_bool in enumerate(assigned_to_centroid):
             for j, j_bool in enumerate(assigned_to_centroid):
+                if (i < j): # do top half of matrix along diagonal
+                    continue
                 if i_bool and j_bool:
                     d_ij = np.sqrt(np.sum((matrix[i,]-matrix[j,])**2))
                     D_j += d_ij
-        return D_j/(2*n_r)
+        return D_j/(n_r)
 
     def _calculate_W_k(self, matrix, centroids, centroid_assignments):
         k = len(centroids)

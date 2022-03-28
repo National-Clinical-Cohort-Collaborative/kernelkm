@@ -58,3 +58,9 @@ class TestKMeans(TestCase):
             inferred_k, _, _ = gstat.calculate_good_k()
             print(f"this_k: {this_k} inferred_k: {inferred_k}")
             self.assertEqual(this_k, inferred_k)
+
+    def test_gap_stat_one_cluster(self):
+        gstat = GapStat(datamat=self._mat, patient_id_list=self._labels, max_k=1)
+        k, s_stat, g_stat = gstat.calculate_good_k()
+        self.assertEqual(1, k)
+        self.assertTrue(g_stat[0] == 0)
