@@ -12,7 +12,8 @@ class MyMatrix:
         shpe = self._matrix.shape
         if shpe[0] != shpe[1]:
             raise ValueError(f"Matrix is not a symmetrix matrix, it is {shpe[0]}x{shpe[1]}")
-        A = self._matrix
+        # A = self._matrix
+        A = np.copy(self._matrix)
         dg = A.diagonal()
         dg_idx = np.diag_indices(A.shape[0])
         A[dg_idx] = np.zeros(len(dg))
