@@ -8,8 +8,9 @@ class MyMatrix:
             raise ValueError("Can only be called on np.matrix")
         self._matrix = matrix
 
-    def get_permuted_matrix(self):
+    def get_permuted_matrix(self) -> np.ndarray:
         """Permutate all values in matrix that are NOT on the diagonal
+        Note that the matrix returned by this method is not symmetric about the diagonal
         """
         shape = self._matrix.shape
         if shape[0] != shape[1]:
