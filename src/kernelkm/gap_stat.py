@@ -50,7 +50,7 @@ class GapStat:
     def _get_avg_permuted_W_k(self, this_k: int):
         w_k_estimate = []
 
-        mm = MyMatrix()
+        mm = MyMatrix(self._matrix)
 
         for i in range(self._B):
             randomized_M = mm.get_permuted_matrix()
