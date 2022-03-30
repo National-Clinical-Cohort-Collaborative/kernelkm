@@ -24,3 +24,23 @@ class MyMatrix:
         A[dg_idx] = np.diagonal(self._matrix)  # replace diagonal
 
         return A
+
+    def get_permuted_symmetric(self) -> np.array:
+        A = np.copy(self._matrix)
+        n = A.shape[0]
+        upper_triangle_len = sum([i for i in range(n-1)])
+        vec = np.zeros(upper_triangle_len)
+        idx = 0
+        for i in range(1, n):
+            for j in range(i+1, n):
+                elem = A[i,j]
+                vec[idx] = elem
+                idx += 1
+        vec = vec[np.random.permutation(upper_triangle_len)]
+        idx = 0
+        for i in range(1,n):
+            for j in range(i+1, n):
+                A[i, j] = vec[idx]
+                A[j, i] = vec[idx]
+                idx += 1
+

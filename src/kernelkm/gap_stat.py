@@ -53,7 +53,7 @@ class GapStat:
         mm = MyMatrix(self._matrix)
 
         for i in range(self._B):
-            randomized_M = mm.get_permuted_matrix()
+            randomized_M = mm.get_permuted_symmetric()
             kkm = KernelKMeans(randomized_M, self._pat_id_list, self._max_iter)
             centroids, centroid_assignments, errors = kkm.calculate(k=this_k)
             w_k_star = self._calculate_W_k(randomized_M, centroids, centroid_assignments)
