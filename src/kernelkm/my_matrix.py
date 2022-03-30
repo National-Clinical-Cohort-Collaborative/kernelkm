@@ -43,4 +43,5 @@ class MyMatrix:
                 A[i, j] = vec[idx]
                 A[j, i] = vec[idx]
                 idx += 1
+        return A
 

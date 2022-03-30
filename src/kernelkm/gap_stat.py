@@ -25,16 +25,21 @@ class GapStat:
         self._max_k = max_k
         self._B = B
 
-    def calculate_good_k(self):
+    def calculate_good_k(self, do_all_k=False):
 
         """
         data check in KernelKMeans class!
+        do_all_k: If true, do not stop after we have found the optimum k, but go on up to self._max_k,
+        which we need for outputting a GapStat figure and debugging, but do not need to actually get the 
+        optimum k.
         """
         kkm = KernelKMeans(self._matrix, self._pat_id_list, self._max_iter)
-        gap_stat = [0]
-        s_stat = [0]
+        gap_stat = []
+        s_stat = []
+        opt_k = None
         # to test up to self._max_k we need the following range!
-        for k in range(1, self._max_k + 1):
+        for i in range(self._max_k):
+            k = i + 1 # cluster count 
             centroids, centroid_assignments, errors = kkm.calculate(k=k)
             W_k_observed = self._calculate_W_k(self._matrix, centroids, centroid_assignments)
             W_k_expectation, s_k = self._get_avg_permuted_W_k(k)
@@ -42,10 +47,16 @@ class GapStat:
             gap_stat.append(gap_k)
             s_stat.append(s_k)
             # check if gap(k-1) \geq gap(k) - s_{k}
-            if k > 1:
-                if gap_stat[k-1] - gap_stat[k] + s_stat[k] > 0:
-                    return k-1, s_stat, gap_stat
-        return self._max_k, s_stat, gap_stat  # if we get here we do not have great clusters
+            if i > 0:
+                if gap_stat[i-1] - gap_stat[i] + s_stat[i] > 0:
+                    if not opt_k:
+                        opt_k = k-1
+                    if not do_all_k:
+                        return opt_k, gap_stat
+        if not opt_k:
+            # couldnt find a good k, so set it to the highest value we tested
+            opt_k = self._max_k
+        return opt_k, gap_stat  # if we get here we do not have great clusters
 
     def _get_avg_permuted_W_k(self, this_k: int):
         w_k_estimate = []
