@@ -135,6 +135,19 @@ class KernelKMeans:
 
         return centroids_assigned, centroid_errors
 
+
+    def calculate_sse(self, centroids, centroid_assignments):
+        n_patients = self.get_patient_count()
+        sse = 0
+        for pat_idx in range(n_patients):
+            c = centroid_assignments[pat_idx]
+            assigned_centroid = centroids.iloc[c, :].to_numpy()
+            patient_vector = self._matrix[pat_idx, :]
+            error = np.sum((assigned_centroid - patient_vector)**2)
+            sse += error
+        return sse
+
+
     def _adjust_centroids(self, centroid_assignments):
         """
         centroid_assignments - a list of integers with the same length as the number of patients
