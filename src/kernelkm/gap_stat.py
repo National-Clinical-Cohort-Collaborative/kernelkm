@@ -1,18 +1,22 @@
 import numpy as np
-import copy
 from .kernel_k_means import KernelKMeans
 from .my_matrix import MyMatrix
 
 
 class GapStat:
-    """
-    Gap statistic for kernel k-means algorithm
+    """Gap statistic for kernel k-means algorithm
+
+    Gap statistic is a method for choosing an appropriate k (number of clusters) for
+    k means clustering. See here for a good explanation:
+    https://towardsdatascience.com/k-means-clustering-and-the-gap-statistics-4c5d414acd29
     """
 
     def __init__(self, datamat, patient_id_list, max_k=10, B=4, max_iter=100):
         """
-        B: number of permutations/randomizations for gapstat
-        max_iter: for K means
+        patient_id_list: square numpy matrix that defines pairwise similarity between data points (here patients)
+        max_k: largest k (number of clusters) to investigate [10]
+        B: number of permutations/randomizations for gapstat [4]
+        max_iter: maximum number of iterations for k means clustering [100]
         """
         shape = datamat.shape
         if shape[0] != shape[1]:
@@ -26,8 +30,8 @@ class GapStat:
         self._B = B
 
     def calculate_good_k(self, do_all_k=False):
+        """Calculate a good k to use for k means clustering using the gap statistic
 
-        """
         data check in KernelKMeans class!
         do_all_k: If true, do not stop after we have found the optimum k, but go on up to self._max_k,
         which we need for outputting a GapStat figure and debugging, but do not need to actually get the 
@@ -39,7 +43,7 @@ class GapStat:
         opt_k = None
         # to test up to self._max_k we need the following range!
         for i in range(self._max_k):
-            k = i + 1 # cluster count 
+            k = i + 1  # cluster count 
             centroids, centroid_assignments, errors = kkm.calculate(k=k)
             W_k_observed = self._calculate_W_k(self._matrix, centroids, centroid_assignments)
             W_k_expectation, s_k = self._get_avg_permuted_W_k(k)

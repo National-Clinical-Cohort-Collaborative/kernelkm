@@ -2,8 +2,12 @@ import numpy as np
 
 
 class MyMatrix:
+    """MyMatrix is a class to represent a patient-patient similarity matrix. There are helper methods to
+    produce randomized matrices, which are used for example in measuring the similarity of patients to
+    randomized clusters of patient for measuring generalizability of clusters.
+    """
 
-    def __init__(self, matrix):
+    def __init__(self, matrix: np.ndarray):
         if not isinstance(matrix, np.ndarray):
             raise ValueError("Can only be called on np.matrix")
         self._matrix = matrix
