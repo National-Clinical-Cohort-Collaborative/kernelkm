@@ -10,7 +10,7 @@ Welcome to kernelkm's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   src
+   modules
 
 
 Indices and tables
