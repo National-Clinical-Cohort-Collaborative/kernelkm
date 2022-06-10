@@ -10,8 +10,7 @@ Welcome to kernelkm's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   usage
-   api
+   src
 
 
 Indices and tables
